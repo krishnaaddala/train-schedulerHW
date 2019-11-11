@@ -21,6 +21,7 @@ var firebaseConfig = {
   
   // Create a variable to reference the database.
   var database = firebase.database();
+
 //clear function after  adding the train to the train schedule
 function clearTrainOnAdd(){
     $("#trainName").val("");
@@ -30,14 +31,14 @@ function clearTrainOnAdd(){
     }
 
   //adding train using the submit button
-  $("#add-employee-btn").on("click", function(event) {
+  $("#add-train-btn").on("click", function(event) {
     event.preventDefault();
 
     var trainName = $("#trainName").val().trim();
   var trainDestination = $("#trainDestination").val().trim();
   //using moment update THIS SECTION TO USE HH:mm - military time
-  var firstTrainTime = moment($("#firstTrainTime").val().trim(), "MM/DD/YYYY").format("X");
-  var trainFrequency = $("#trainFrequency").val().trim();
+  var firstTrainTime = moment($("#firstTrainTime").val().trim(), "HH:mm").format("HH:mm");
+  var trainFrequency = parseInt($("#trainFrequency").val().trim());
 
   // adding an object to hold train data to store
   var newTrain = {
@@ -53,7 +54,7 @@ function clearTrainOnAdd(){
   // Logs everything to console
   console.log(newTrain.name);
   console.log(newTrain.destination);
-  console.log(newEmp.firstTrain);
+  console.log(newTrain.firstTrain);
   console.log(newTrain.frequency);
 
   clearTrainOnAdd();
@@ -67,25 +68,24 @@ function clearTrainOnAdd(){
     var trainDestination = childSnapshot.val().destination;
     var firstTrainTime = childSnapshot.val().firstTrain;
     var trainFrequency = childSnapshot.val().frequency;
-    
-    console.log(empName);
-    console.log(empRole);
-    console.log(empStart);
-    console.log(empRate);
+ 
+    var now = moment();
+    var today = now.format('YYYY-MM-DD');
+    var nowTS = today  + " " + firstTrainTime + ':00'
+    var nowTSDate = moment(nowTS).subtract(1, 'day')
+    var duration = Math.floor(moment.duration(moment().diff(nowTSDate)).asMinutes());
+    var offset = Math.floor(duration % trainFrequency)
+    var timeToNextTrain = trainFrequency - offset;
+    var nextTrainArrival = moment().add(timeToNextTrain, 'minute').format("HH:mm");
 
-    var frequencyInMins = "";
-
-    var nextTrainArrival = "";
-
-    var minutesAwayForNextTrain = "";
 
 
     var newTrainAdded = $("<tr>").append(
         $("<td>").text(trainName),
         $("<td>").text(trainDestination),
-        $("<td>").text(frequencyInMins),
+        $("<td>").text(trainFrequency),
         $("<td>").text(nextTrainArrival),
-        $("<td>").text(minutesAwayForNextTrain),
+        $("<td>").text(timeToNextTrain),
       );
     
       // Append the new row to the table
