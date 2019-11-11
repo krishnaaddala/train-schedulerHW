@@ -1,5 +1,5 @@
 //connect to FireBase
-// firebase.app.config
+//firebase.app.config
 //firebase.database
 //onClick event for the Submit button and send the response to firebase
 //logic to update the existing page with some data from firebase (append to the page)
@@ -47,7 +47,6 @@ $("#add-train-btn").on("click", function (event) {
         firstTrain: firstTrainTime,
         frequency: trainFrequency
     };
-    // Uploads employee data to the database
     database.ref().push(newTrain);
     clearTrainOnAdd();
 });
@@ -61,6 +60,7 @@ database.ref().on("child_added", function (childSnapshot) {
     var firstTrainTime = childSnapshot.val().firstTrain;
     var trainFrequency = childSnapshot.val().frequency;
 
+//moment JS logic to calculate nextTrainArrival & timeToNextTrain
     var now = moment();
     var today = now.format('YYYY-MM-DD');
     var nowTS = today + " " + firstTrainTime + ':00'
@@ -71,7 +71,7 @@ database.ref().on("child_added", function (childSnapshot) {
     var nextTrainArrival = moment().add(timeToNextTrain, 'minute').format("HH:mm");
 
 
-
+//append the tabe row and table data dynamically
     var newTrainAdded = $("<tr>").append(
         $("<td>").text(trainName),
         $("<td>").text(trainDestination),
