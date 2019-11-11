@@ -1,0 +1,10 @@
+.display-4{
+    font-weight: bold;
+}
+p{
+    font-weight: bold;
+}
+.card-header{
+    font-weight: bold;
+    background-color: lightblue;
+}
