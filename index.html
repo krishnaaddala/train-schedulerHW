@@ -28,17 +28,18 @@
         </div>
         <div class="card">
             <div class="card-header">
-                Train Schedule
+                Current Train Schedule
             </div>
             <div class="card-body">
 
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
+                            <th scope="col">Train Name</th>
+                            <th scope="col">Destination</th>
+                            <th scope="col">Frequency(min)</th>
+                            <th scope="col">Next Arrival</th>
+                            <th scope="col">Minutes Away</th>
                         </tr>
                     </thead>
                     <tbody id = "trainSchedule">
@@ -66,29 +67,27 @@
         </div>
         <div class="card mt-3">
             <div class="card-header">
-                Train Schedule
+                Add Train
             </div>
             <div class="card-body">
                 <form>
                     <div class="form-group">
                         <label for="trainName">Train Name</label>
-                        <input type="email" class="form-control" id="trainName" aria-describedby="emailHelp"
-                            placeholder="Enter email">
+                        <input type="text" class="form-control" id="trainName">
 
                     </div>
                     <div class="form-group">
                         <label for="trainDestination">Destination</label>
-                        <input type="password" class="form-control" id="trainDestination" placeholder="Password">
+                        <input type="text" class="form-control" id="trainDestination">
                     </div>
                     <div class="form-group">
                         <label for="firstTrainTime">First Train Time (HH:mm - military time)</label>
-                        <input type="email" class="form-control" id="firstTrainTime" aria-describedby="emailHelp"
-                            placeholder="Enter email">
+                        <input type="text" class="form-control" id="firstTrainTime">
 
                     </div>
                     <div class="form-group">
                         <label for="trainFrequency">Frequency (min)</label>
-                        <input type="password" class="form-control" id="trainFrequency" placeholder="Password">
+                        <input type="text" class="form-control" id="trainFrequency">
                     </div>
                     <button type="submit" class="btn btn-primary float-right" id="add-train-btn">Submit</button>
                 </form>
