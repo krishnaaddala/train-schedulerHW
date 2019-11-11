@@ -23,58 +23,55 @@ Chrome browser
 
 ## Screenshots of homework progress
 
-![Code progression Final](https://github.com/krishnaaddala/HW-giphyAssignment/blob/master/assets/images/StartGifTasticPage.png "Starting page of gifTastic")
+![Code progression Final](https://github.com/krishnaaddala/train-schedulerHW/blob/master/assets/images/Code_Final1.png "TrainScheduler Final Layout 1")
 
-![Code progression Final](https://github.com/krishnaaddala/HW-giphyAssignment/blob/master/assets/images/responsive-1.png "gifTastic reponsive layout 1")
+![Code progression Final](https://github.com/krishnaaddala/train-schedulerHW/blob/master/assets/images/code_final2.png "TrainScheduler Final Layout 2")
 
-![Code progression Final](https://github.com/krishnaaddala/HW-giphyAssignment/blob/master/assets/images/responsive-2.png "gifTastic reponsive layout 2")
 
 ## Gif walkthrough
 
-![](https://github.com/krishnaaddala/HW-Giphyassignment2/blob/master/assets/images/Nov-04-2019%2022-01-15.gif)
+![](https://github.com/krishnaaddala/train-schedulerHW/blob/master/assets/images/trainScheduler.gif)
 
 
 ## Code Snippets
 
-```<body onload="addButtons()" background="assets/images/marvelvsDC.jpg">
-    <div class="container">
-        <h1> Giphy Images</h1>
-
-        <div class="giphy-form">
-            <label for="giphy-input"></label>
-            <!-- added onFocus to remove the search field automatically
-            upon adding the search as a button -->
-            <input type="text" id="giphy-input" onfocus="this.value=''">
-            <input id="add-giphy" type="submit" value="Add a Superhero">
-            <div id="dynamic-btnview"></div>
-        </div>
+```var firebaseConfig = {
+    apiKey: "AIzaSyAY6AYGDx-D7WF3a0W5fcs_aK91uCPfp6c",
+    authDomain: "train-scheduler-assignme-3cc0b.firebaseapp.com",
+    databaseURL: "https://train-scheduler-assignme-3cc0b.firebaseio.com",
+    projectId: "train-scheduler-assignme-3cc0b",
+    storageBucket: "train-scheduler-assignme-3cc0b.appspot.com",
+    messagingSenderId: "474090265715",
+    appId: "1:474090265715:web:d2823fa7bb9f7605491e06",
+    measurementId: "G-1R09HW8CW6"
+};
   ```
 
-  ```function giphyDisplay() {
-    $("#giphy-btndisplay").empty();
-    var superhero = $(this).attr("data-giphy");
-    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=tuHOptJN3WWLtwMil1BWJF8fU18JA1f5&q=" + superhero + "&limit=10&offset=0&rating=G&lang=en";
-    //Making an AJAX call
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    }).then(function (response) {
+  ```function clearTrainOnAdd() {
+    $("#trainName").val("");
+    $("#trainDestination").val("");
+    $("#firstTrainTime").val("");
+    $("#trainFrequency").val("");
+}
   ```
 
-  ```$("#add-giphy").on("click", function (event) {
-    event.preventDefault();
-    var superhero = $("#giphy-input").val().trim();
-    superheroList.push(superhero);
-    addDynamicBtn(superhero);
+  ``` // adding an object to hold train data to store
+    var newTrain = {
+        name: trainName,
+        destination: trainDestination,
+        firstTrain: firstTrainTime,
+        frequency: trainFrequency
+    };
 });
   ```
-  ```$(document).on("click", ".super_hero_images", function () {
-    img = this;
-    var imgSrc = img.getAttribute("src");
-    var imgAlt = img.getAttribute("data-alt");
-    img.setAttribute("src", imgAlt);
-    img.setAttribute("data-alt", imgSrc);
-});
+  ```var now = moment();
+    var today = now.format('YYYY-MM-DD');
+    var nowTS = today + " " + firstTrainTime + ':00'
+    var nowTSDate = moment(nowTS).subtract(1, 'day')
+    var duration = Math.floor(moment.duration(moment().diff(nowTSDate)).asMinutes());
+    var offset = Math.floor(duration % trainFrequency)
+    var timeToNextTrain = trainFrequency - offset;
+    var nextTrainArrival = moment().add(timeToNextTrain, 'minute').format("HH:mm");
   ```
 Git commands:
 

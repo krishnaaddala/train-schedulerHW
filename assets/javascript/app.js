@@ -1,9 +1,10 @@
 //connect to FireBase
-//onClick event for the Submit button and send the response to firebase
-//logic to update the existing page with some data from firebase (append to the page)
-// look at class example for firebase
 // firebase.app.config
 //firebase.database
+//onClick event for the Submit button and send the response to firebase
+//logic to update the existing page with some data from firebase (append to the page)
+//moment JS logic for calculating next train arrival and minutes away
+
 
 //initialize firebase
 var firebaseConfig = {
@@ -15,63 +16,54 @@ var firebaseConfig = {
     messagingSenderId: "474090265715",
     appId: "1:474090265715:web:d2823fa7bb9f7605491e06",
     measurementId: "G-1R09HW8CW6"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  
-  // Create a variable to reference the database.
-  var database = firebase.database();
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Create a variable to reference the database.
+var database = firebase.database();
 
 //clear function after  adding the train to the train schedule
-function clearTrainOnAdd(){
+function clearTrainOnAdd() {
     $("#trainName").val("");
     $("#trainDestination").val("");
     $("#firstTrainTime").val("");
     $("#trainFrequency").val("");
-    }
+}
 
-  //adding train using the submit button
-  $("#add-train-btn").on("click", function(event) {
+//adding train using the submit button
+$("#add-train-btn").on("click", function (event) {
     event.preventDefault();
 
     var trainName = $("#trainName").val().trim();
-  var trainDestination = $("#trainDestination").val().trim();
-  //using moment update THIS SECTION TO USE HH:mm - military time
-  var firstTrainTime = moment($("#firstTrainTime").val().trim(), "HH:mm").format("HH:mm");
-  var trainFrequency = parseInt($("#trainFrequency").val().trim());
+    var trainDestination = $("#trainDestination").val().trim();
+    var firstTrainTime = moment($("#firstTrainTime").val().trim(), "HH:mm").format("HH:mm");
+    var trainFrequency = parseInt($("#trainFrequency").val().trim());
 
-  // adding an object to hold train data to store
-  var newTrain = {
-    name: trainName,
-    destination: trainDestination,
-    firstTrain: firstTrainTime,
-    frequency: trainFrequency
-  };
+    // adding an object to hold train data to store
+    var newTrain = {
+        name: trainName,
+        destination: trainDestination,
+        firstTrain: firstTrainTime,
+        frequency: trainFrequency
+    };
+    // Uploads employee data to the database
+    database.ref().push(newTrain);
+    clearTrainOnAdd();
+});
 
-  // Uploads employee data to the database
-  database.ref().push(newTrain);
-
-  // Logs everything to console
-  console.log(newTrain.name);
-  console.log(newTrain.destination);
-  console.log(newTrain.firstTrain);
-  console.log(newTrain.frequency);
-
-  clearTrainOnAdd();
-  });
-
-  //adding to firebase as a child event and this adds a row to the HTML when a user adds a train
-  database.ref().on("child_added", function(childSnapshot) {
+//adding to firebase as a child event and this adds a row to the HTML when a user adds a train
+database.ref().on("child_added", function (childSnapshot) {
     console.log(childSnapshot.val());
-  
+
     var trainName = childSnapshot.val().name;
     var trainDestination = childSnapshot.val().destination;
     var firstTrainTime = childSnapshot.val().firstTrain;
     var trainFrequency = childSnapshot.val().frequency;
- 
+
     var now = moment();
     var today = now.format('YYYY-MM-DD');
-    var nowTS = today  + " " + firstTrainTime + ':00'
+    var nowTS = today + " " + firstTrainTime + ':00'
     var nowTSDate = moment(nowTS).subtract(1, 'day')
     var duration = Math.floor(moment.duration(moment().diff(nowTSDate)).asMinutes());
     var offset = Math.floor(duration % trainFrequency)
@@ -86,9 +78,9 @@ function clearTrainOnAdd(){
         $("<td>").text(trainFrequency),
         $("<td>").text(nextTrainArrival),
         $("<td>").text(timeToNextTrain),
-      );
-    
-      // Append the new row to the table
-      $("#trainSchedule > tbody").append(newTrainAdded);
+    );
 
-  });
+    // Append the new row to the table
+    $("#trainSchedule > tbody").append(newTrainAdded);
+
+});
